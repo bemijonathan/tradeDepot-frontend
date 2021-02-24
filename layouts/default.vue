@@ -1,5 +1,6 @@
 <template>
   <div>
+    <notifications></notifications>
     <div
       v-if="alertOpen"
       class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20"

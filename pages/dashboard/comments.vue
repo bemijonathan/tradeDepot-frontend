@@ -21,9 +21,10 @@
             <div class="flex flex-wrap -mx-3">
               <div
                 class="md:w-1/3 p-3 w-full bg-blue-500 relative rounded"
-                v-for="i in 6"
+                v-for="(comment, i) in data"
                 :key="i"
               >
+                <!-- {{ comment }} -->
                 <div
                   class="text-xl inline-block mr-5 align-middle w-full items-center justify-center flex text-white"
                 >
@@ -139,8 +140,15 @@ export default {
   data() {
     return {
       date: new Date().getFullYear(),
+      data: [],
     }
   },
   middleware: ['authenticated'],
+  async mounted() {
+    this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+    const { data } = await this.$axios.$get('/likes/comments')
+    console.log(data)
+    this.data = data.data
+  },
 }
 </script>

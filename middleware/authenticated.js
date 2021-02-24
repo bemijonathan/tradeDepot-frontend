@@ -6,12 +6,12 @@ export default async function (vue) {
         store.commit("authentication/checkValidity")
         if (!store.state.authentication.isAutheticated) {
             console.log('from here !!!')
-            // store.commit("authentication/notify")
+            store.commit("authentication/notify")
             redirect('/login')
         }
     } else {
         console.log('from here !!!!!!!')
-        // store.commit("authentication/notify")
+        store.commit("authentication/notify")
         redirect('/login')
     }
 }

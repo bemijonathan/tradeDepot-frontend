@@ -66,6 +66,16 @@
               >
                 {{ data.user ? data.user.email : '' }}
               </button>
+
+              <button
+                @click="deleteProduct"
+                v-if="
+                  data.user ? (data.user._id === user_id ? true : false) : false
+                "
+                class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -250,7 +260,7 @@ export default {
         disabled: false,
       },
       user_id: '',
-      product_like: '',
+      product_like: false,
     }
   },
   methods: {
@@ -304,10 +314,23 @@ export default {
       console.log(data)
       this.data = data
     },
+    async deleteProduct() {
+      this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+      const { data } = await this.$axios.$delete(
+        '/products/' + this.$route.params.id
+      )
+      console.log(data)
+      this.$router.push('/products')
+    },
   },
   async mounted() {
-    await this.getDAta()
     this.user_id = localStorage.getItem('user-id')
+    await this.getDAta()
+    this.product_like = this.data.likes
+      ? this.data.likes.find((e) => e._id === this.user_id)
+        ? 'red'
+        : 'none'
+      : 'none'
   },
 }
 </script>

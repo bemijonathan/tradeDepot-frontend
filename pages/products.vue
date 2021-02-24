@@ -25,11 +25,14 @@
               </h1>
               <div class="mt-4 text-lg text-gray-300">
                 <div class="mb-3 pt-0">
-                  <input
-                    type="search"
-                    placeholder="Placeholder"
-                    class="px-2 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-base shadow outline-none focus:outline-none focus:shadow-outline w-full"
-                  />
+                  <form @submit.prevent="searchTown">
+                    <input
+                      type="search"
+                      v-model="search"
+                      placeholder="Placeholder"
+                      class="px-2 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-base shadow outline-none focus:outline-none focus:shadow-outline w-full"
+                    />
+                  </form>
                 </div>
               </div>
             </div>
@@ -172,7 +175,16 @@ export default {
   data() {
     return {
       data: [],
+      search: '',
     }
+  },
+  methods: {
+    async searchTown() {
+      this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+      const { data } = await this.$axios.$get('/products?q=' + this.search)
+      console.log(data)
+      this.data = data
+    },
   },
   middleware: ['authenticated'],
   async mounted() {

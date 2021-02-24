@@ -16,24 +16,31 @@
           <!-- <line-chart-component></line-chart-component>
           <bar-chart-component></bar-chart-component> -->
         </div>
-        <div class="flex flex-wrap mt-4">
-          <section class="text-gray-600 body-font">
+        <div class="flex flex-wrap mt-4 w-full">
+          <section class="text-gray-600 body-font w-full">
             <div class="flex flex-wrap -m-3">
-              <div class="md:w-1/4 p-3 w-full" v-for="i in 8" :key="i">
+              <div
+                class="md:w-1/4 p-3 w-full"
+                v-for="(favorites, i) in data"
+                :key="i"
+              >
                 <div class="shadow-md">
-                  <a class="block relative h-48 rounded overflow-hidden">
+                  <n-link
+                    :to="'/product/' + favorites.product._id"
+                    class="block relative h-48 rounded overflow-hidden"
+                  >
                     <img
                       alt="ecommerce"
                       class="object-cover object-center w-full h-full block"
-                      src="https://dummyimage.com/420x260"
+                      :src="favorites.product.image"
                     />
-                  </a>
+                  </n-link>
                   <div class="p-4 bg-white">
                     <h2 class="text-gray-900 title-font text-lg font-medium">
-                      The Catalyzer
+                      {{ favorites.product.name }}
                     </h2>
-                    <p class="mt-1">$16.00</p>
-                    <n-link :to="'product/' + i">
+                    <p class="mt-1">${{ favorites.product.price }}</p>
+                    <n-link :to="'/product/' + favorites._id">
                       <h3
                         class="text-gray-500 text-xs tracking-widest title-font mb-1"
                       >
@@ -124,6 +131,7 @@ export default {
   data() {
     return {
       date: new Date().getFullYear(),
+      data: [],
     }
   },
   middleware: ['authenticated'],
@@ -131,7 +139,7 @@ export default {
     this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
     const { data } = await this.$axios.$get('/likes/products')
     console.log(data)
-    this.data = data
+    this.data = data.data
   },
 }
 </script>

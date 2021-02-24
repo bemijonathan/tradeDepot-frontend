@@ -4,6 +4,23 @@
     <main>
       <section class="absolute w-full h-full">
         <div
+          v-if="error"
+          class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20 left-10"
+        >
+          <span class="text-xl inline-block mr-5 align-middle">
+            <i class="fas fa-bell"></i>
+          </span>
+          <span class="inline-block align-middle mr-8">
+            {{ message ? 'Please Login to continue!' : 'Error occurred' }}
+          </span>
+          <button
+            class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+            v-on:click="closeAlert()"
+          >
+            <span>×</span>
+          </button>
+        </div>
+        <div
           class="absolute top-0 w-full h-full bg-gray-900"
           style="background-size: 100%; background-repeat: no-repeat"
           :style="{
@@ -126,9 +143,14 @@ export default {
     return {
       email: '',
       password: '',
+      error: false,
+      message: '',
     }
   },
   methods: {
+    closeAlert() {
+      this.error = false
+    },
     async Login() {
       try {
         if (this.disabled) {
@@ -144,7 +166,8 @@ export default {
         this.$store.commit('authentication/parseJwt', token.data.token)
         this.$router.push('/products')
       } catch (error) {
-        console.log(error)
+        console.log(error.response)
+        this.error = true
       }
     },
   },

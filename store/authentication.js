@@ -38,7 +38,7 @@ export const mutations = {
     notify(state, payload) {
         debugger
         if (payload !== undefined) {
-            state.payload = payload
+            state.alert = payload
         } else {
             state.alert = true
         }
