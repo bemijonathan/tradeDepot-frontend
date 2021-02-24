@@ -117,14 +117,16 @@
                       Close
                     </button>
                     <button
+                      v-if="!hide"
                       class="text-blue-500 border border-solid border-blue-500 rounded ml-3 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                       type="button"
                       style="transition: all 0.15s ease"
                       v-on:click="submit"
                       :disabled="disabled"
                     >
-                      Add Comment
+                      Create Product
                     </button>
+                    <button v-else type="button">Loading...</button>
                   </div>
                 </div>
               </div>
@@ -256,7 +258,7 @@ export default {
       this.file = e.target.files[0]
     },
     async submit() {
-      this.hide = false
+      this.hide = true
       try {
         let form = new FormData()
         form.append('file', this.file)
@@ -279,6 +281,8 @@ export default {
           position: 'top right',
           type: 'error',
         })
+      } finally {
+        this.hide = false
       }
     },
     async getData() {
