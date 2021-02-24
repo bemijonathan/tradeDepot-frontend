@@ -58,46 +58,25 @@
     </div>
     <div class="container px-5 py-24 mx-auto -mt-10">
       <div class="flex flex-wrap -m-4">
-        <div class="p-4 md:w-1/3" v-for="i in 7" :key="i">
+        <div class="p-4 md:w-1/3" v-for="(d, i) in data" :key="i">
           <div
             class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden"
           >
-            <img
-              class="lg:h-48 md:h-36 w-full object-cover object-center"
-              src="https://dummyimage.com/720x400"
-              alt="blog"
-            />
+            <n-link :to="'product/' + d._id">
+              <img
+                class="lg:h-48 md:h-36 w-full object-cover object-center"
+                :src="d.image"
+                alt="blog"
+              />
+            </n-link>
             <div class="p-6">
-              <h2
-                class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1"
-              >
-                CATEGORY
-              </h2>
               <h1 class="title-font text-lg font-medium text-gray-900 mb-3">
-                The Catalyzer
+                {{ d.name }}
               </h1>
               <p class="leading-relaxed mb-3">
-                Photo booth fam kinfolk cold-pressed sriracha leggings jianbing
-                microdosing tousled waistcoat.
+                {{ d.description }}
               </p>
               <div class="flex items-center flex-wrap">
-                <n-link
-                  :to="'product/' + i"
-                  class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0"
-                  >View
-                  <svg
-                    class="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M5 12h14"></path>
-                    <path d="M12 5l7 7-7 7"></path>
-                  </svg>
-                </n-link>
                 <span
                   class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center"
                 >
@@ -128,7 +107,7 @@
                     <path
                       d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
                     ></path></svg
-                  >1.2K
+                  >{{ d.likes.length }}
                 </span>
                 <span
                   class="text-gray-400 inline-flex items-center leading-none text-sm"
@@ -144,9 +123,33 @@
                   >
                     <path
                       d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
-                    ></path></svg
-                  >6
+                    ></path>
+                  </svg>
+                  {{ d.comments.length }}
                 </span>
+              </div>
+              <div class="flex justify-between">
+                <p>{{ new Date(d.createdAt) }}</p>
+                <p>{{ d.country }}</p>
+              </div>
+              <div>
+                <n-link
+                  :to="'product/' + d._id"
+                  class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0"
+                  >View
+                  <svg
+                    class="w-4 h-4 ml-2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                  </svg>
+                </n-link>
               </div>
             </div>
           </div>
@@ -166,7 +169,18 @@ export default {
     NavbarComponent,
     FooterComponent,
   },
+  data() {
+    return {
+      data: [],
+    }
+  },
   middleware: ['authenticated'],
+  async mounted() {
+    this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+    const { data } = await this.$axios.$get('/products')
+    console.log(data)
+    this.data = data
+  },
 }
 </script>
 

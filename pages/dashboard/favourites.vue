@@ -127,5 +127,11 @@ export default {
     }
   },
   middleware: ['authenticated'],
+  async mounted() {
+    this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+    const { data } = await this.$axios.$get('/likes/products')
+    console.log(data)
+    this.data = data
+  },
 }
 </script>

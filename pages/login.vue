@@ -48,6 +48,7 @@
                         >Email</label
                       ><input
                         type="email"
+                        v-model="email"
                         class="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Email"
                         style="transition: all 0.15s ease 0s"
@@ -59,6 +60,7 @@
                         for="grid-password"
                         >Password</label
                       ><input
+                        v-model="password"
                         type="password"
                         class="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Password"
@@ -82,6 +84,8 @@
                         class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                         type="button"
                         style="transition: all 0.15s ease 0s"
+                        :disabled="disabled"
+                        @click="Login"
                       >
                         Sign In
                       </button>
@@ -117,6 +121,41 @@ export default {
   components: {
     NavbarComponent,
     FooterComponent,
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    async Login() {
+      try {
+        if (this.disabled) {
+          return
+        }
+        const token = await this.$axios.post('/auth/signin', {
+          email: this.email,
+          password: this.password,
+        })
+        debugger
+        localStorage.setItem('auth-token', token.data.token)
+        localStorage.setItem('user-id', token.data.id)
+        this.$store.commit('authentication/parseJwt', token.data.token)
+        this.$router.push('/products')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+  computed: {
+    disabled() {
+      if (this.email === '' || this.password === '') {
+        return true
+      } else {
+        return false
+      }
+    },
   },
 }
 </script>

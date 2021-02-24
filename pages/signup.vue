@@ -1,6 +1,23 @@
 <template>
   <div>
     <navbar-component></navbar-component>
+    <div
+      v-if="error"
+      class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20"
+    >
+      <span class="text-xl inline-block mr-5 align-middle">
+        <i class="fas fa-bell"></i>
+      </span>
+      <span class="inline-block align-middle mr-8">
+        {{ message.length ? message : 'Error occured Contact Support' }}
+      </span>
+      <button
+        class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+        v-on:click="closeAlert()"
+      >
+        <span>×</span>
+      </button>
+    </div>
     <main>
       <section class="absolute w-full h-full">
         <div
@@ -30,7 +47,7 @@
                       <small>Or sign in with credentials</small>
                     </n-link>
                   </div>
-                  <form>
+                  <div>
                     <div class="relative w-full mb-1">
                       <label
                         class="block uppercase text-gray-700 text-xs font-bold mb-1"
@@ -107,7 +124,7 @@
                         Sign Up
                       </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
               <div class="flex flex-wrap mt-6">
@@ -146,10 +163,18 @@ export default {
       city: '',
       country: '',
       state: '',
+      error: false,
+      message: '',
     }
   },
   methods: {
+    closeAlert() {
+      this.error = false
+      this.message = ''
+    },
     async signUp() {
+      this.error = false
+      this.message = ''
       try {
         if (this.disabled) {
           return
@@ -162,12 +187,14 @@ export default {
           state: this.state,
         })
         debugger
-        localStorage.setItem('auth-token')
-        localStorage.setItem('user-id')
-        this.$store.commit('authentication/parseJwt', token.token)
+        localStorage.setItem('auth-token', token.data.token)
+        localStorage.setItem('user-id', token.data.id)
+        this.$store.commit('authentication/parseJwt', token.data.token)
         this.$router.push('/products')
       } catch (error) {
-        console.log(error)
+        console.log(error.response)
+        this.message = error.response.data.data
+        this.error = true
       }
     },
   },

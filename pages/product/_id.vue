@@ -7,38 +7,29 @@
           <img
             alt="ecommerce"
             class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src="https://dummyimage.com/400x400"
+            :src="data.image"
           />
           <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 class="text-sm title-font text-white tracking-widest">
-              BRAND NAME
+              {{ data.name }}
             </h2>
             <h1 class="text-white text-3xl title-font font-medium mb-1">
               The Catcher in the Rye
             </h1>
             <p class="leading-relaxed mt-10 text-white">
-              Fam locavore kickstarter distillery. Mixtape chillwave tumeric
-              sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo
-              juiceramps cornhole raw denim forage brooklyn. Everyday carry +1
-              seitan poutine tumeric. Gastropub blue bottle austin listicle
-              pour-over, neutra jean shorts keytar banjo tattooed umami
-              cardigan.
+              {{ data.description }}
             </p>
 
             <div class="flex mt-4">
               <span class="title-font font-medium text-2xl text-white"
-                >$58.00</span
+                >${{ data.price }}</span
               >
-              <button
-                class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
-              >
-                Button
-              </button>
               <button
                 class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
+                @click="like($route.params.id, 'product')"
               >
                 <svg
-                  fill="currentColor"
+                  :fill="product_like"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
@@ -49,6 +40,31 @@
                     d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
                   ></path>
                 </svg>
+              </button>
+            </div>
+            <p class="leading-relaxed mt-3 text-white">
+              Country : {{ data.country }}
+            </p>
+            <p class="leading-relaxed mt-3 text-white">
+              State : {{ data.state }}
+            </p>
+            <p class="leading-relaxed mt-3 text-white">City {{ data.city }}</p>
+            <p class="leading-relaxed mt-3 text-white">
+              Created at : {{ data.createdAt }}
+            </p>
+            <p class="leading-relaxed mt-3 text-white">
+              Updated Last : {{ data.UpdatedAt }}
+            </p>
+
+            <div class="flex mt-4">
+              <span class="title-font font-medium text-2xl text-white"
+                >Product by : {{ data.user ? data.user.name : '' }}</span
+              >
+
+              <button
+                class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+              >
+                {{ data.user ? data.user.email : '' }}
               </button>
             </div>
           </div>
@@ -68,6 +84,13 @@
                   Comments
                 </h1>
                 <div>
+                  <div
+                    v-if="data.comments ? data.comments.length === 0 : false"
+                  >
+                    <h1 class="text-2xl text-white text-center">
+                      No Comments Yet !!
+                    </h1>
+                  </div>
                   <button
                     class="bg-pink-500 text-white active:bg-blue-600 uppercase text-sm px-3 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none my-3 text-sm"
                     type="button"
@@ -107,6 +130,7 @@
                             class="relative flex w-full flex-wrap items-stretch mb-3"
                           >
                             <textarea
+                              v-model="comment"
                               type="text"
                               placeholder="Comment"
                               class="px-3 py-4 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-base border border-gray-400 outline-none focus:outline-none focus:shadow-outline w-full pr-10"
@@ -134,7 +158,8 @@
                             class="text-blue-500 border border-solid border-blue-500 rounded ml-3 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                             type="button"
                             style="transition: all 0.15s ease"
-                            v-on:click="toggleModal()"
+                            v-on:click="submit"
+                            :disabled="disabled"
                           >
                             Add Comment
                           </button>
@@ -150,9 +175,12 @@
               </div>
             </div>
           </div>
+
+          {{ product_like }}
+
           <div
             class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-blue-500 w-1/3 mx-auto"
-            v-for="i in 6"
+            v-for="(comment, i) in data.comments"
             :key="i"
           >
             <div
@@ -163,53 +191,42 @@
                 alt="..."
                 class="shadow rounded-full max-w-full h-8 align-middle border-none inline-block"
               />
-              <span class="ml-4 text-sm"> Jonathan </span>
+              <span class="ml-4 text-sm">
+                {{
+                  comment.user ? comment.user.name || comment.user.email : ''
+                }}
+              </span>
               <span class="ml-auto text-xs"> 15th Febuary 2021 </span>
             </div>
-            <span class="inline-block align-middle mr-2 mt-4 text-xs">
-              <b class="capitalize">green!</b> This is a green alert - check it
-              This is a green alert - check itThis is a green alert - check
-              itThis is a green alert - check itThis is a green alert - check
-              itThis is a green alert - check itThis is a green alert - check
-              itThis is a green alert - check it out!
-            </span>
-            <span
-              class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200"
+            <div class="inline-block align-middle mr-2 mt-4 text-sm w-full">
+              {{ comment.comment }}
+            </div>
+            <div
+              class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 cursor-pointer"
+              @click="like(comment._id, 'comments', i)"
             >
               <svg
-                class="w-4 h-4 mr-1"
+                class="w-8 h-8 mr-1"
                 stroke="currentColor"
                 stroke-width="2"
-                fill="none"
+                :fill="
+                  comment.likes
+                    ? comment.likes.find((e) => e._id === user_id)
+                      ? 'red'
+                      : 'none'
+                    : 'none'
+                "
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 viewBox="0 0 24 24"
               >
                 <path
                   d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-                ></path></svg
-              >1.2K
-            </span>
+                ></path>
+              </svg>
+              {{ comment.likes ? comment.likes.length : 0 }}
+            </div>
           </div>
-        </div>
-        <div
-          class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
-          style="height: 70px; transform: translateZ(0px)"
-        >
-          <svg
-            class="absolute bottom-0 overflow-hidden"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-            version="1.1"
-            viewBox="0 0 2560 100"
-            x="0"
-            y="0"
-          >
-            <polygon
-              class="text-gray-300 fill-current"
-              points="2560 0 2560 100 0 100"
-            ></polygon>
-          </svg>
         </div>
       </div>
     </section>
@@ -228,12 +245,69 @@ export default {
   data() {
     return {
       showModal: false,
+      data: {
+        comment: '',
+        disabled: false,
+      },
+      user_id: '',
+      product_like: '',
     }
   },
   methods: {
+    async like(id, entity, i) {
+      try {
+        this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+        const { data } = await this.$axios.$post(`/likes/${id}/${entity}`)
+
+        if (entity === 'product') {
+          if (this.product_like === 'red') {
+            this.product_like = 'none'
+          } else {
+            this.product_like = 'red'
+          }
+        } else {
+          this.data.comments[i].liked = !this.data.comments[i].liked
+        }
+        await this.getDAta()
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async submit() {
+      this.disabled = true
+      try {
+        if (this.comment.trim() === '') {
+          return
+        }
+        this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+        const { data } = await this.$axios.$post(
+          '/comments/' + this.$route.params.id,
+          { comment: this.comment }
+        )
+        console.log(data)
+        await this.getDAta()
+        this.toggleModal()
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.disabled = false
+      }
+    },
     toggleModal: function () {
       this.showModal = !this.showModal
     },
+    async getDAta() {
+      this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+      const { data } = await this.$axios.$get(
+        '/products/' + this.$route.params.id
+      )
+      console.log(data)
+      this.data = data
+    },
+  },
+  async mounted() {
+    await this.getDAta()
+    this.user_id = localStorage.getItem('user-id')
   },
 }
 </script>

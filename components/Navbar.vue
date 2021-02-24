@@ -35,6 +35,17 @@
               Login</n-link
             >
           </li>
+
+          <li class="flex items-center">
+            <n-link
+              to="/products"
+              class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+              ><i
+                class="lg:text-gray-300 text-gray-500 far fa-file-alt text-lg leading-lg mr-2"
+              ></i>
+              Products</n-link
+            >
+          </li>
         </ul>
         <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
           <li class="flex items-center">

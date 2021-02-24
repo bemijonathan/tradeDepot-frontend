@@ -4,7 +4,7 @@
     <div class="relative md:ml-64 bg-gray-200">
       <navbar-component></navbar-component>
       <!-- Header -->
-      <div class="relative bg-pink-600 md:pt-32 pb-32 pt-12">
+      <div class="relative bg-blue-600 md:pt-32 pb-32 pt-12">
         <div class="px-4 md:px-10 mx-auto w-full">
           <div class="text-3xl text-white font-bold">
             {{ $route.name.toUpperCase() }}
@@ -17,9 +17,23 @@
           <bar-chart-component></bar-chart-component> -->
         </div>
         <div class="flex flex-wrap mt-4">
+          {{ data }}
+          <div
+            class="text-3xl text-white relative font-bold"
+            v-if="data.length === 0"
+          >
+            You have no Product
+            <button class="bg-white py-2 px-4 ml-10 rounded text-black">
+              Create One
+            </button>
+          </div>
           <section class="text-gray-600 body-font">
             <div class="flex flex-wrap -m-3">
-              <div class="md:w-1/4 p-3 w-full" v-for="i in 8" :key="i">
+              <div
+                class="md:w-1/4 p-3 w-full"
+                v-for="(product, i) in data"
+                :key="i"
+              >
                 <div class="shadow-md">
                   <a class="block relative h-48 rounded overflow-hidden">
                     <img
@@ -124,7 +138,14 @@ export default {
   data() {
     return {
       date: new Date().getFullYear(),
+      data: [],
     }
+  },
+  async mounted() {
+    this.$axios.setToken(localStorage.getItem('auth-token'), 'Bearer')
+    const { data } = await this.$axios.$get('/products/dashboard')
+    console.log(data)
+    this.data = data
   },
   middleware: ['authenticated'],
 }

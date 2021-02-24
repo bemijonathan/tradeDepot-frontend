@@ -42,9 +42,6 @@ export const mutations = {
         } else {
             state.alert = true
         }
-        setTimeout(() => {
-            state.alert = false
-        }, 3000)
     },
     parseJwt(state) {
         state.token = localStorage.getItem('auth-token')
@@ -52,6 +49,7 @@ export const mutations = {
         if (state.token) {
             // set to decoded value
             const data = jwt.decode(state.token)
+            console.log(data)
             state.currentUser = data
         }
     },
