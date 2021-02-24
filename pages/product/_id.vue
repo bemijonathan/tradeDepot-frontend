@@ -280,6 +280,15 @@ export default {
         }
         await this.getDAta()
       } catch (err) {
+        this.$notify({
+          group: 'foo',
+          title: 'Error',
+          text: error.response.data
+            ? error.response.data.data || 'Error Occured'
+            : 'Error Occured',
+          position: 'top right',
+          type: 'error',
+        })
         console.log(err)
       }
     },
@@ -298,7 +307,15 @@ export default {
         await this.getDAta()
         this.toggleModal()
       } catch (e) {
-        console.log(e)
+        this.$notify({
+          group: 'foo',
+          title: 'Error',
+          text: error.response.data
+            ? error.response.data.data || 'Error Ocurred'
+            : 'Error Occured',
+          position: 'top right',
+          type: 'error',
+        })
       } finally {
         this.disabled = false
       }

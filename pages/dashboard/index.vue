@@ -131,6 +131,12 @@
             </div>
           </div>
           <section class="text-gray-600 body-font w-full">
+            <div
+              class="text-3xl text-white font-bold relative text-center"
+              v-if="data.length === 0"
+            >
+              You have no Product
+            </div>
             <div class="flex flex-wrap -m-3 w-full">
               <div
                 class="md:w-1/4 p-3 w-full"
@@ -264,8 +270,15 @@ export default {
         await this.getData()
         this.toggleModal()
       } catch (e) {
-        this.hide = false
-        console.log(e)
+        this.$notify({
+          group: 'foo',
+          title: 'Error',
+          text: error.response.data
+            ? error.response.data.data || 'Error Creating Product'
+            : 'Error Occured',
+          position: 'top right',
+          type: 'error',
+        })
       }
     },
     async getData() {

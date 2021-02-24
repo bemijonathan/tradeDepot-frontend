@@ -1,9 +1,9 @@
 <template>
   <div>
-    <notifications></notifications>
+    <notifications group="foo" />
     <div
       v-if="alertOpen"
-      class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20"
+      class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20 right-0"
     >
       <span class="text-xl inline-block mr-5 align-middle">
         <i class="fas fa-bell"></i>

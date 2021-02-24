@@ -167,7 +167,16 @@ export default {
         this.$router.push('/products')
       } catch (error) {
         console.log(error.response)
-        this.error = true
+        this.$notify({
+          group: 'foo',
+          title: 'Error',
+          text: error.response.data
+            ? error.response.data.data || 'incorrect Login details'
+            : 'Error Occured',
+          position: 'top right',
+          type: 'error',
+        })
+        console.log(error.response)
       }
     },
   },

@@ -36,12 +36,20 @@ export const mutations = {
         }
     },
     notify(state, payload) {
-        debugger
+        // debugger
         if (payload !== undefined) {
             state.alert = payload
         } else {
             state.alert = true
         }
+        // console.log(this)
+        // this.app.$notify({
+        //     group: 'foo',
+        //     title: 'Unauthorized',
+        //     text: 'Login to Continue',
+        //     position: 'top right',
+        //     type: 'error',
+        // })
     },
     parseJwt(state) {
         state.token = localStorage.getItem('auth-token')

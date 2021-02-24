@@ -18,6 +18,13 @@
         </div>
         <div class="flex flex-wrap mt-4 w-full">
           <section class="text-gray-600 body-font w-full">
+            <div
+              class="text-3xl text-white font-bold relative text-center"
+              v-if="data.length === 0"
+            >
+              You have no favorite Product
+              <small><n-link to="/product"> view products now </n-link></small>
+            </div>
             <div class="flex flex-wrap -m-3">
               <div
                 class="md:w-1/4 p-3 w-full"

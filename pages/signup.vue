@@ -192,9 +192,16 @@ export default {
         this.$store.commit('authentication/parseJwt', token.data.token)
         this.$router.push('/products')
       } catch (error) {
-        console.log(error.response)
-        this.message = error.response.data.data
-        this.error = true
+        this.$notify({
+          group: 'foo',
+          title: 'Error',
+          text: error.response.data
+            ? error.response.data.data ||
+              'All fields are required and must be filled properly'
+            : 'Error Occured',
+          position: 'top right',
+          type: 'error',
+        })
       }
     },
   },

@@ -18,6 +18,12 @@
         </div>
         <div class="flex flex-wrap mt-4">
           <section class="text-gray-600 body-font">
+            <div
+              class="text-3xl text-white font-bold relative text-center"
+              v-if="data.length === 0"
+            >
+              You have no favorite Comment
+            </div>
             <div class="flex flex-wrap -mx-3">
               <div
                 class="md:w-1/3 p-3 w-full bg-blue-500 relative rounded"
