@@ -130,20 +130,17 @@
 <script>
 import NavbarComponent from '../../components/Navbar.vue'
 import SidebarComponent from '../../components/Sidebar.vue'
-// import LineChartComponent from '../../components/LineChart.vue'
-// import BarChartComponent from '../../components/BarChart.vue'
 export default {
   name: 'dashboard-page',
   components: {
     NavbarComponent,
     SidebarComponent,
-    // LineChartComponent,
-    // BarChartComponent,
   },
   data() {
     return {
       date: new Date().getFullYear(),
     }
   },
+  middleware: ['authenticated'],
 }
 </script>

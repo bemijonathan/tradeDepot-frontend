@@ -1,55 +1,39 @@
 <template>
   <div>
+    <div
+      v-if="alertOpen"
+      class="text-white px-6 py-4 border-0 rounded fixed mb-4 bg-red-500 z-20 mt-20"
+    >
+      <span class="text-xl inline-block mr-5 align-middle">
+        <i class="fas fa-bell"></i>
+      </span>
+      <span class="inline-block align-middle mr-8">
+        <b class="capitalize">Unauthorized</b> Please Login to continue!
+      </span>
+      <button
+        class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+        v-on:click="closeAlert()"
+      >
+        <span>×</span>
+      </button>
+    </div>
     <Nuxt />
   </div>
 </template>
-
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+<script>
+export default {
+  data() {
+    return {}
+  },
+  methods: {
+    closeAlert() {
+      this.$store.commit('authentication/notify', false)
+    },
+  },
+  computed: {
+    alertOpen() {
+      return this.$store.state.authentication.alert
+    },
+  },
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-</style>
+</script>

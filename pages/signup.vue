@@ -37,6 +37,7 @@
                         for="grid-password"
                         >Email</label
                       ><input
+                        v-model="email"
                         type="email"
                         class="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Email"
@@ -49,6 +50,7 @@
                         for="grid-password"
                         >Country</label
                       ><input
+                        v-model="country"
                         type="text"
                         class="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="South Africa"
@@ -61,6 +63,7 @@
                         for="grid-password"
                         >City</label
                       ><input
+                        v-model="city"
                         type="text"
                         class="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="City"
@@ -73,6 +76,7 @@
                         for="grid-password"
                         >State</label
                       ><input
+                        v-model="state"
                         type="text"
                         class="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="State"
@@ -85,6 +89,7 @@
                         for="grid-password"
                         >Password</label
                       ><input
+                        v-model="password"
                         type="password"
                         class="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Password"
@@ -97,8 +102,9 @@
                         type="button"
                         style="transition: all 0.15s ease 0s"
                         :disabled="disabled"
+                        @click="signUp"
                       >
-                        Sign Up {{ Strin }}
+                        Sign Up
                       </button>
                     </div>
                   </form>
@@ -144,14 +150,25 @@ export default {
   },
   methods: {
     async signUp() {
-      const token = await this.$axios.post('/auth/signup', {
-        email: this.email,
-        password: this.password,
-        city: this.city,
-        country: this.country,
-        state: this.state,
-      })
-      console.log(token)
+      try {
+        if (this.disabled) {
+          return
+        }
+        const token = await this.$axios.post('/auth/signup', {
+          email: this.email,
+          password: this.password,
+          city: this.city,
+          country: this.country,
+          state: this.state,
+        })
+        debugger
+        localStorage.setItem('auth-token')
+        localStorage.setItem('user-id')
+        this.$store.commit('authentication/parseJwt', token.token)
+        this.$router.push('/products')
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
   computed: {
@@ -174,6 +191,7 @@ export default {
 
 <style>
 button[disabled] {
-  background: 'gray !important';
+  background: gray !important;
+  cursor: not-allowed;
 }
 </style>

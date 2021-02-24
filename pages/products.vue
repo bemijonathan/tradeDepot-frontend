@@ -166,6 +166,7 @@ export default {
     NavbarComponent,
     FooterComponent,
   },
+  middleware: ['authenticated'],
 }
 </script>
 

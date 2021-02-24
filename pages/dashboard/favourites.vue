@@ -126,5 +126,6 @@ export default {
       date: new Date().getFullYear(),
     }
   },
+  middleware: ['authenticated'],
 }
 </script>
