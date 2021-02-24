@@ -47,7 +47,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:3500/api', // Used as fallback if no runtime config is provided
+    // baseURL: 'http://localhost:3500/api', // Used as fallback if no runtime config is provided
+    baseURL: 'https://trade-depot-interview.herokuapp.com/api'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
