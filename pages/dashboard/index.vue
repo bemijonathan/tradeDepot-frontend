@@ -65,7 +65,7 @@
                       <input
                         v-model="price"
                         type="number"
-                        placeholder="Comment"
+                        placeholder="Price"
                         class="px-3 py-4 text-black relative bg-white rounded text-base border border-gray-400 outline-none focus:outline-none focus:shadow-outline w-full pr-10 my-4"
                       />
 
